@@ -1,0 +1,309 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "desafio-node-05",
+    "description": "Desafio de nodeJS do curso Ignite da plataforma Rocketseat",
+    "version": "0.1.9"
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a new user",
+        "description": "Create a new user",
+        "requestBody": {
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": "true",
+                    "example": "Matheus Teste"
+                  },
+                  "email": {
+                    "type": "string",
+                    "required": "true",
+                    "example": "matheusptrein@teste.com"
+                  },
+                  "created_at": {
+                    "type": "Date",
+                    "required": "false",
+                    "example": "2022-01-11T19:31:00.060Z"
+                  },
+                  "updated_at": {
+                    "type": "Date",
+                    "required": "false",
+                    "example": "2022-01-11T19:31:00.060Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "Matheus Teste"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "matheusptrein@teste.com"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "c99da882-7167-453c-847d-87e943ef1d17"
+                    },
+                    "admin": {
+                      "type": "boolean",
+                      "example": "false"
+                    },
+                    "created_at": {
+                      "type": "date",
+                      "example": "2022-01-11T19:31:00.060Z"
+                    },
+                    "updated_at": {
+                      "type": "date",
+                      "example": "2022-01-11T19:31:00.060Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "example": {
+                        "status": 400,
+                        "message": "User already exists"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary": "List all user",
+        "description": "List all user if headers send user_id of an user with admin permission",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "user_id",
+            "required": "true",
+            "description": "The user ID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "example": {
+                      "id": "c99da882-7167-453c-847d-87e943ef1d17",
+                      "name": "Matheus Teste",
+                      "email": "matheusptrein@teste.com",
+                      "admin": "false",
+                      "created_at": "2022-01-11T19:31:00.060Z",
+                      "updated_at": "2022-01-11T20:31:00.060Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error: Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "status": 400,
+                      "message": "User does not have admin permission"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        }
+      },
+      "/users/{user_id}/admin": {
+        "patch": {
+          "tags": ["Users"],
+          "summary": "Turn a user admin",
+          "description": "Turn a user admin",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "user_id",
+              "required": true,
+              "description": "The user ID",
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Matheus Teste"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "matheusptrein@teste.com"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "c99da882-7167-453c-847d-87e943ef1d17"
+                      },
+                      "admin": {
+                        "type": "boolean",
+                        "example": "true"
+                      },
+                      "created_at": {
+                        "type": "date",
+                        "example": "2022-01-11T19:31:00.060Z"
+                      },
+                      "updated_at": {
+                        "type": "date",
+                        "example": "2022-01-11T19:31:00.060Z"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Error: Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "example": {
+                      "error": {
+                        "status": 404,
+                        "message": "User not found"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/users/{user_id}": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "List an user by user_id",
+          "description": "List an user by user_id",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "user_id",
+              "required": true,
+              "description": "The user ID",
+              "schema": {
+                "type": "string",
+                "format": "uuid",
+                "example": "c99da882-7167-453c-847d-87e943ef1d17"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "Matheus Teste"
+                      },
+                      "email": {
+                        "type": "string",
+                        "example": "matheusptrein@teste.com"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "c99da882-7167-453c-847d-87e943ef1d17"
+                      },
+                      "admin": {
+                        "type": "boolean",
+                        "example": "false"
+                      },
+                      "created_at": {
+                        "type": "date",
+                        "example": "2022-01-11T19:31:00.060Z"
+                      },
+                      "updated_at": {
+                        "type": "date",
+                        "example": "2022-01-11T19:31:00.060Z"
+                      }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error: Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "error": {
+                      "status": 404,
+                      "message": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          } 
+        }
+      }
+    }
+  }
+}
